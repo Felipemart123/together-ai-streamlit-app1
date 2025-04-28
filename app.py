@@ -5,7 +5,7 @@ import together
 together.api_key = st.secrets["TOGETHER_API_KEY"]
 
 # Model to use
-MODEL = "togethercomputer/CodeLlama-13b-Instruct"  # or pick another Together model
+MODEL = "togethercomputer/CodeLlama-13b-Instruct"
 
 st.title("Python Code Generator with Together AI")
 
@@ -17,15 +17,18 @@ if st.button("Generate Code"):
         st.error("Please enter a description first.")
     else:
         with st.spinner("Generating Python code..."):
-            response = together.Complete.create(
+            response = together.chat.completions.create(
                 model=MODEL,
-                prompt=f"Write a Python script for this request:\n{user_prompt}",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant that writes Python code based on user descriptions."},
+                    {"role": "user", "content": f"Write a Python script for the following request:\n{user_prompt}"}
+                ],
                 max_tokens=300,
                 temperature=0.2,
                 top_p=0.7,
             )
 
-            generated_code = response['output']['choices'][0]['text']
+            generated_code = response.choices[0].message.content
 
         st.subheader("Generated Python Code:")
         st.code(generated_code, language="python")
