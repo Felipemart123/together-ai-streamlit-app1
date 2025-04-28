@@ -4,8 +4,8 @@ import together
 # Set your API key
 together.api_key = st.secrets["TOGETHER_API_KEY"]
 
-# Model to use
-MODEL = "togethercomputer/CodeLlama-13b-Instruct"
+# Model to use (changed!)
+MODEL = "togethercomputer/llama-2-7b-chat"
 
 st.title("Python Code Generator with Together AI")
 
