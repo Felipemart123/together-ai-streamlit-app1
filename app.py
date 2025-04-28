@@ -1,31 +1,31 @@
 import streamlit as st
-import together
+import openai
 
-# Set your API key
-together.api_key = st.secrets["TOGETHER_API_KEY"]
+# Set your API key from Streamlit secrets
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
-# Model to use (changed!)
-MODEL = "togethercomputer/llama-2-7b-chat"
+st.title("Python Code Generator")
 
-st.title("Python Code Generator with Together AI")
-
-# Get user input
+# User input
 user_prompt = st.text_area("Describe the Python code you want to generate:")
 
 if st.button("Generate Code"):
     if not user_prompt.strip():
         st.error("Please enter a description first.")
     else:
-        with st.spinner("Generating Python code..."):
-            response = together.Complete.create(
-                model=MODEL,
-                prompt=f"Write a Python script for the following request:\n{user_prompt}",
-                max_tokens=300,
+        with st.spinner("Generating code..."):
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant that writes Python scripts."},
+                    {"role": "user", "content": f"Write a Python script for: {user_prompt}"}
+                ],
                 temperature=0.2,
-                top_p=0.7,
+                max_tokens=500,
+                top_p=0.7
             )
 
-            generated_code = response['output']['choices'][0]['text']
+            generated_code = response.choices[0].message.content
 
         st.subheader("Generated Python Code:")
         st.code(generated_code, language="python")
