@@ -17,16 +17,18 @@ if st.button("Generate Code"):
         st.error("Please enter a description first.")
     else:
         with st.spinner("Generating Python code..."):
-            response = together.chat.completions.create(
+            response = together.Complete.create(
                 model=MODEL,
-                messages=[
-                    {"role": "system", "content": "You are a helpful assistant that writes Python code based on user descriptions."},
-                    {"role": "user", "content": f"Write a Python script for the following request:\n{user_prompt}"}
-                ],
+                prompt=f"Write a Python script for the following request:\n{user_prompt}",
                 max_tokens=300,
                 temperature=0.2,
                 top_p=0.7,
             )
+
+            generated_code = response['output']['choices'][0]['text']
+
+        st.subheader("Generated Python Code:")
+        st.code(generated_code, language="python")
 
             generated_code = response.choices[0].message.content
 
