@@ -29,8 +29,3 @@ if st.button("Generate Code"):
 
         st.subheader("Generated Python Code:")
         st.code(generated_code, language="python")
-
-            generated_code = response.choices[0].message.content
-
-        st.subheader("Generated Python Code:")
-        st.code(generated_code, language="python")
